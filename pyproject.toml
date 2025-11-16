@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "web_scrapers"
+version = "0.1.0"
+description = ""
+authors = ["Alexandra Minina"]
+
+[tool.poetry.dependencies]
+python = "3.12"
+requests = "2.32.5"
+aiohttp = "3.13.2"
+httpx = "0.28.1"
