@@ -34,10 +34,10 @@ class HttpxBasedScraper(BaseScraper):
         tasks = []
         for url in urls:
             tasks.append(self.single_get_request(url))
-        return await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
     async def batch_post_requests(self, request_data: list[tuple[str, dict[str, Any]]]):
         tasks = []
         for url, data in request_data:
             tasks.append(self.single_post_request(url, data))
-        return await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks, return_exceptions=True)
