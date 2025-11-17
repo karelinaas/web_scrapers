@@ -10,7 +10,8 @@ from scrapers.base import BaseScraper
 class HttpxBasedScraper(BaseScraper):
     client: httpx.AsyncClient | None
 
-    def __init__(self):
+    def __init__(self, base_url: str):
+        super().__init__(base_url)
         self.client = None
 
     async def __aenter__(self):
@@ -22,12 +23,12 @@ class HttpxBasedScraper(BaseScraper):
             await self.client.aclose()
 
     async def single_get_request(self, url: str):
-        response = await self.client.get(url)
-        print(response.status_code)
+        response = await self.client.get(f"{self.base_url}{url}")
+        print(url, response.status_code)
 
     async def single_post_request(self, url: str, data: dict[str, Any]):
-        response = await self.client.post(url, json=data)
-        print(response.status_code)
+        response = await self.client.post(f"{self.base_url}{url}", json=data)
+        print(url, response.status_code)
 
     async def batch_get_requests(self, urls: list[str]):
         tasks = []

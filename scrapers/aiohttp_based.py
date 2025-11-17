@@ -23,11 +23,11 @@ class AiohttpBasedScraper(BaseScraper):
             await self.session.close()
 
     async def single_get_request(self, url: str):
-        async with self.session.get(url) as response:
+        async with self.session.get(f"{self.base_url}{url}") as response:
             print(url, response.status)
 
     async def single_post_request(self, url: str, data: dict[str, Any]):
-        async with self.session.post(url, json=data) as response:
+        async with self.session.post(f"{self.base_url}{url}", json=data) as response:
             print(url, response.status)
 
     async def batch_get_requests(self, urls: list[str]):
