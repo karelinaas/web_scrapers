@@ -1,48 +1,82 @@
 import time
+from typing import Any
 
-from constants import BASE_URL, GET_REQUESTS_URLS, POST_REQUESTS_DATA
-from scrapers.base import BaseScraper
+from constants import (
+    BASE_URL,
+    GET_REQUESTS_URLS,
+    INFO_QUERIES_EXEC_TIME,
+    INFO_SCRAPER_TEST_END,
+    INFO_SCRAPER_TEST_START,
+    POST_REQUESTS_DATA,
+)
 from scrapers import RequestsBasedScraper
+from scrapers.base import BaseScraper
+
+def _batch_runner_helper(
+    scraper: BaseScraper,
+    requests_data: list[tuple[str, dict[str, Any]]] | list[str],
+    method: str = "GET",
+):
+    start_time = time.time()
+
+    if method == "GET":
+        scraper.batch_get_requests(requests_data)
+    elif method == "POST":
+        scraper.batch_post_requests(requests_data)
+    else:
+        raise TypeError(f"Invalid method: {method}")
+
+    print(
+        INFO_QUERIES_EXEC_TIME.format(
+            method=method,
+            requests_count=len(requests_data),
+            seconds=(time.time() - start_time),
+        )
+    )
+
+async def _abatch_runner_helper(
+    async_scraper: BaseScraper,
+    requests_data: list[tuple[str, dict[str, Any]]] | list[str],
+    method: str = "GET",
+):
+    start_time = time.time()
+
+    async with async_scraper as scraper:
+        if method == "GET":
+            await scraper.batch_get_requests(requests_data)
+        elif method == "POST":
+            await scraper.batch_post_requests(requests_data)
+        else:
+            raise TypeError(f"Invalid method: {method}")
+
+    print(
+        INFO_QUERIES_EXEC_TIME.format(
+            method=method,
+            requests_count=len(requests_data),
+            seconds=(time.time() - start_time),
+        )
+    )
 
 async def demo_async_scraper(scraper_class: type[BaseScraper]):
-    print("-" * 10, scraper_class, "Scraper", "-" * 10)
+    print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
     async_scraper = scraper_class(BASE_URL)
 
     get_requests = GET_REQUESTS_URLS * 6
     post_requests = POST_REQUESTS_DATA * 10
 
-    start_time_get = time.time()
+    await _abatch_runner_helper(async_scraper, get_requests)
+    await _abatch_runner_helper(async_scraper, post_requests, "POST")
 
-    async with async_scraper as scraper:
-        await scraper.batch_get_requests(get_requests)
+    print(INFO_SCRAPER_TEST_END)
 
-    print(f"GET {len(get_requests)} queries in {(time.time() - start_time_get)} seconds")
-
-    start_time_post = time.time()
-
-    async with async_scraper as scraper:
-        await scraper.batch_post_requests(post_requests)
-
-    print(f"POST {len(post_requests)} queries in {(time.time() - start_time_post)} seconds")
-    print("-" * 80)
-
-
-def demo_sync_scraper():
-    print("-" * 10, "Requests Scraper", "-" * 10)
-    scraper = RequestsBasedScraper(BASE_URL)
+def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper):
+    print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
+    scraper = scraper_class(BASE_URL)
 
     get_requests = GET_REQUESTS_URLS
     post_requests = POST_REQUESTS_DATA
 
-    start_time_get = time.time()
+    _batch_runner_helper(scraper, get_requests)
+    _batch_runner_helper(scraper, post_requests, "POST")
 
-    scraper.batch_get_requests(get_requests)
-
-    print(f"GET {len(get_requests)} queries in {(time.time() - start_time_get)} seconds")
-
-    start_time_post = time.time()
-
-    scraper.batch_post_requests(post_requests)
-
-    print(f"POST {len(post_requests)} queries in {(time.time() - start_time_post)} seconds")
-    print("-" * 80)
+    print(INFO_SCRAPER_TEST_END)

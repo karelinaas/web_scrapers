@@ -31,3 +31,7 @@ POST_REQUESTS_DATA = [
     ("redirect_to", {"url": "https://www.google.com/", "status_code": 200}),
     ("redirect_to", {"url": "https://qwertyuioppahasdgksfk.com/", "status_code": 404}),
 ]
+
+INFO_QUERIES_EXEC_TIME = "{method} {requests_count} queries in {seconds} seconds\n"
+INFO_SCRAPER_TEST_START = ("-" * 15) + " {scraper_class} " + ("-" * 15)
+INFO_SCRAPER_TEST_END = "-" * 80
