@@ -57,18 +57,6 @@ async def _abatch_runner_helper(
         )
     )
 
-async def demo_async_scraper(scraper_class: type[BaseScraper]):
-    print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
-    async_scraper = scraper_class(BASE_URL)
-
-    get_requests = GET_REQUESTS_URLS * 6
-    post_requests = POST_REQUESTS_DATA * 10
-
-    await _abatch_runner_helper(async_scraper, get_requests)
-    await _abatch_runner_helper(async_scraper, post_requests, "POST")
-
-    print(INFO_SCRAPER_TEST_END)
-
 def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper):
     print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
     scraper = scraper_class(BASE_URL)
@@ -78,5 +66,17 @@ def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper):
 
     _batch_runner_helper(scraper, get_requests)
     _batch_runner_helper(scraper, post_requests, "POST")
+
+    print(INFO_SCRAPER_TEST_END)
+
+async def demo_async_scraper(scraper_class: type[BaseScraper]):
+    print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
+    async_scraper = scraper_class(BASE_URL)
+
+    get_requests = GET_REQUESTS_URLS * 6
+    post_requests = POST_REQUESTS_DATA * 10
+
+    await _abatch_runner_helper(async_scraper, get_requests)
+    await _abatch_runner_helper(async_scraper, post_requests, "POST")
 
     print(INFO_SCRAPER_TEST_END)
