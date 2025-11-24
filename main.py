@@ -15,5 +15,4 @@ async def main(sys_argv: list[str]):
         demo_sync_scraper(MultiThreadRequestsBasedScraper, many_queries=True)
 
 if __name__ == "__main__":
-    sys_argv = sys.argv
-    asyncio.run(main(sys.argv or ["all"]))
+    asyncio.run(main(sys.argv[1:] or ["all"]))
