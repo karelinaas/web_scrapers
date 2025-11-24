@@ -35,3 +35,5 @@ POST_REQUESTS_DATA = [
 INFO_QUERIES_EXEC_TIME = "{method} {requests_count} queries in {seconds} seconds\n"
 INFO_SCRAPER_TEST_START = ("-" * 15) + " {scraper_class} " + ("-" * 15)
 INFO_SCRAPER_TEST_END = "-" * 80
+
+MAX_WORKERS = 30

@@ -57,12 +57,12 @@ async def _abatch_runner_helper(
         )
     )
 
-def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper):
+def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper, *, many_queries: bool = False):
     print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
     scraper = scraper_class(BASE_URL)
 
-    get_requests = GET_REQUESTS_URLS
-    post_requests = POST_REQUESTS_DATA
+    get_requests = GET_REQUESTS_URLS * 6 if many_queries else GET_REQUESTS_URLS
+    post_requests = POST_REQUESTS_DATA * 10 if many_queries else POST_REQUESTS_DATA
 
     _batch_runner_helper(scraper, get_requests)
     _batch_runner_helper(scraper, post_requests, "POST")
