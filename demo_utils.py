@@ -9,8 +9,18 @@ from constants import (
     INFO_SCRAPER_TEST_START,
     POST_REQUESTS_DATA,
 )
-from scrapers import RequestsBasedScraper
 from scrapers.base import BaseScraper
+
+
+def _print_execution_time(method: str, count: int, start_time: float):
+    print(
+        INFO_QUERIES_EXEC_TIME.format(
+            method=method,
+            requests_count=count,
+            seconds=(time.time() - start_time),
+        )
+    )
+
 
 def _batch_runner_helper(
     scraper: BaseScraper,
@@ -26,13 +36,8 @@ def _batch_runner_helper(
     else:
         raise TypeError(f"Invalid method: {method}")
 
-    print(
-        INFO_QUERIES_EXEC_TIME.format(
-            method=method,
-            requests_count=len(requests_data),
-            seconds=(time.time() - start_time),
-        )
-    )
+    _print_execution_time(method, len(requests_data), start_time)
+
 
 async def _abatch_runner_helper(
     async_scraper: BaseScraper,
@@ -49,15 +54,10 @@ async def _abatch_runner_helper(
         else:
             raise TypeError(f"Invalid method: {method}")
 
-    print(
-        INFO_QUERIES_EXEC_TIME.format(
-            method=method,
-            requests_count=len(requests_data),
-            seconds=(time.time() - start_time),
-        )
-    )
+    _print_execution_time(method, len(requests_data), start_time)
 
-def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper, *, many_queries: bool = False):
+
+def demo_sync_scraper(scraper_class: type[BaseScraper], *, many_queries: bool = False):
     print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
     scraper = scraper_class(BASE_URL)
 
@@ -68,6 +68,7 @@ def demo_sync_scraper(scraper_class: type[BaseScraper] = RequestsBasedScraper, *
     _batch_runner_helper(scraper, post_requests, "POST")
 
     print(INFO_SCRAPER_TEST_END)
+
 
 async def demo_async_scraper(scraper_class: type[BaseScraper]):
     print(INFO_SCRAPER_TEST_START.format(scraper_class=scraper_class))
