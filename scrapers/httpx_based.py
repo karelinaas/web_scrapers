@@ -8,11 +8,7 @@ from scrapers.base import BaseScraper
 
 
 class HttpxBasedScraper(BaseScraper):
-    client: httpx.AsyncClient | None
-
-    def __init__(self, base_url: str):
-        super().__init__(base_url)
-        self.client = None
+    client: httpx.AsyncClient | None = None
 
     async def __aenter__(self):
         self.client = httpx.AsyncClient()

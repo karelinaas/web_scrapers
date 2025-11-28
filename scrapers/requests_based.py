@@ -8,7 +8,7 @@ from scrapers.base import BaseScraper
 
 
 class RequestsBasedScraper(BaseScraper):
-    def single_get_request(self, url: str) -> Any:
+    def single_get_request(self, url: str):
         response = requests.get(f"{self.base_url}{url}")
         print(url, response.status_code)
 

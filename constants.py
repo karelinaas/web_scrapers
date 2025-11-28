@@ -1,4 +1,4 @@
-BASE_URL = "https://httpbin.org/"
+BASE_URL = "https://httpbingo.org/"
 
 GET_REQUESTS_URLS = [
     "get",

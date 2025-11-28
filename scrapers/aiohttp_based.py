@@ -8,11 +8,7 @@ from scrapers.base import BaseScraper
 
 
 class AiohttpBasedScraper(BaseScraper):
-    session: aiohttp.ClientSession | None
-
-    def __init__(self, base_url: str):
-        super().__init__(base_url)
-        self.session = None
+    session: aiohttp.ClientSession | None = None
 
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
