@@ -1,5 +1,5 @@
 # Сравнение времени отработки библиотек для http-запросов: requests, aiohttp, httpx
-Для видео на канале IT POP: 
+Для видео на канале IT POP: https://youtu.be/FsLRiWDojDQ?si=pV3F6xfTpWFgiFPd
 
 ---
 
